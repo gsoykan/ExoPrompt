@@ -12,7 +12,7 @@ defaults:
 # all parameters below will be merged with parameters from default configurations set above
 # this allows you to overwrite only specified parameters
 
-tags: [ "two_layer_mlp", "exo_prompt", "generalization_c_leakage_half", "greenlight_simulation", "timeseries", "transformer", "1m", " baseline" ]
+tags: [ "two_layer_mlp", "exo_prompt", "generalization_c_leakage", "greenlight_simulation", "timeseries", "transformer", "1m", " baseline" ]
 
 seed: 12345
 
@@ -87,12 +87,12 @@ model:
   loss_fn: "original_scale_mse"
 
 data:
-  root_path: ${paths.data_dir}/from_david_by_gurkan/c_leakage_40_sim
+  root_path: ${paths.data_dir}/from_david_by_gurkan/new_world_sim
   train_subset_len: 1000000
   val_subset_len: 10000
   test_subset_len: 100000
   experiment_config:
-    type: "generalization_c_leakage_half_train_half_test" # reference_only, pretraining_mixed, pretraining_mixed_sequential
+    type: "generalization_c_leakage" # reference_only, pretraining_mixed, pretraining_mixed_sequential
     max_train_simulations: null # null
     max_val_simulations: null # null
     max_test_simulations: null # null
