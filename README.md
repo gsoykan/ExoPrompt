@@ -5,7 +5,7 @@
 ExoPrompt fuses structured exogenous prompts with physics-based simulations to deliver digital-twin ready greenhouse climate forecasts that stay robust under changing environmental and operational conditions.
 
 ## Paper Reference
-- Soykan, Gurkan; Babur, Onder; Liu, Qingzhi; Tekinerdogan, Bedir (2024). *ExoPrompt: Transformer-Based Greenhouse Climate Forecasting with Structured Conditioning and Physics-Based Simulation*. Computers and Electronics in Agriculture (submitted). The repository mirrors the experiments described in the manuscript `q_compag_template.tex`.
+- Soykan, Gurkan; Babur, Onder; Liu, Qingzhi; Tekinerdogan, Bedir (2024). *ExoPrompt: Transformer-Based Greenhouse Climate Forecasting with Structured Conditioning and Physics-Based Simulation*. Computers and Electronics in Agriculture (submitted). The repository mirrors the experiments described in the manuscript.
 
 ## Key Capabilities
 - **Exogenous soft prompts** encode 254 structural, environmental, and crop parameters as learnable context, allowing a single transformer backbone to adapt across greenhouse layouts.
