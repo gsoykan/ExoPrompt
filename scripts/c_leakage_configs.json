@@ -1,0 +1,68 @@
+{
+  "cleakage_scenario_0": {
+    "cLeakage": 1e-05
+  },
+  "cleakage_scenario_1": {
+    "cLeakage": 3.578947368421053e-05
+  },
+  "cleakage_scenario_2": {
+    "cLeakage": 5e-05
+  },
+  "cleakage_scenario_3": {
+    "cLeakage": 6.157894736842106e-05
+  },
+  "cleakage_scenario_4": {
+    "cLeakage": 8.736842105263157e-05
+  },
+  "cleakage_scenario_5": {
+    "cLeakage": 0.0001131578947368421
+  },
+  "cleakage_scenario_6": {
+    "cLeakage": 0.00013894736842105261
+  },
+  "cleakage_scenario_7": {
+    "cLeakage": 0.00016473684210526314
+  },
+  "cleakage_scenario_8": {
+    "cLeakage": 0.00019052631578947367
+  },
+  "cleakage_scenario_9": {
+    "cLeakage": 0.0002
+  },
+  "cleakage_scenario_10": {
+    "cLeakage": 0.0002163157894736842
+  },
+  "cleakage_scenario_11": {
+    "cLeakage": 0.00024210526315789473
+  },
+  "cleakage_scenario_12": {
+    "cLeakage": 0.00026789473684210526
+  },
+  "cleakage_scenario_13": {
+    "cLeakage": 0.0002936842105263158
+  },
+  "cleakage_scenario_14": {
+    "cLeakage": 0.0003194736842105263
+  },
+  "cleakage_scenario_15": {
+    "cLeakage": 0.00034526315789473684
+  },
+  "cleakage_scenario_16": {
+    "cLeakage": 0.00037105263157894737
+  },
+  "cleakage_scenario_17": {
+    "cLeakage": 0.0003968421052631579
+  },
+  "cleakage_scenario_18": {
+    "cLeakage": 0.0004226315789473684
+  },
+  "cleakage_scenario_19": {
+    "cLeakage": 0.00044842105263157895
+  },
+  "cleakage_scenario_20": {
+    "cLeakage": 0.0004742105263157895
+  },
+  "cleakage_scenario_21": {
+    "cLeakage": 0.0005
+  }
+}

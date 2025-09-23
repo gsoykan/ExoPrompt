@@ -1,0 +1,43 @@
+_target_: src.models.greenlight_gt_timeseries_module.GreenlightGTTimeSeriesLitModule
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.0001
+  weight_decay: 0.0
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  _partial_: true
+  mode: min
+  factor: 0.1
+  patience: 10
+
+model_configs_dict:
+  seq_len: 96  # Length of the input sequence
+  pred_len: 96  # Length of the prediction horizon
+  label_len: 48
+  output_attention: false  # Whether to output attention weights
+  use_norm: true  # Whether to apply normalization
+  d_model: 512  # Model dimension
+  embed: "timeF"  # Embedding type, could be time-based
+  freq: "t"  # Data frequency (e.g., hourly)
+  dropout: 0.1  # Dropout rate
+  class_strategy: "projection"  # Strategy for handling classes
+  factor: 1  # Attention factor
+  n_heads: 8  # Number of attention heads
+  d_ff: 512  # Feed-forward network dimension
+  activation: "gelu"  # Activation function
+  e_layers: 3  # Number of encoder layers
+  input_num_features: 20 # this is dependent on dataset
+  output_feature_idx: # can also be null
+    - 7
+    - 8
+    - 9
+  output_log_idx: # if the above is null - then this should 7, 8, 9, the order ["tAir", "vpAir", "co2Air"]
+    - 0
+    - 1
+    - 2
+
+# compile model for faster training with pytorch 2.0
+compile: false

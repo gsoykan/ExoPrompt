@@ -1,0 +1,27 @@
+_target_: src.data.exoprompt_greenlight_gt_timeseries_datamodule.ExoPromptGreenLightGTTimeSeriesDataModule
+root_path: ${paths.data_dir}/from_david_by_gurkan/gt
+experiment_config:
+  type: "finetuning_mixed"
+exo_params_len: 254
+return_random_exo_params: false
+size:
+  - 96
+  - 48
+  - 96
+features: "M"
+target: "OT"  # redundant in our context
+scale: true
+timeenc: 1
+freq: "t"  # s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly
+output_feature_idx:
+  - 7
+  - 8
+  - 9
+use_greenlight_scaler: true
+return_all_output_features: true
+discarded_features:
+  - "sideLee"
+  - "sideWind"
+batch_size: 32 # Needs to be divisible by the number of devices (e.g., if in a distributed setup)
+num_workers: 0
+pin_memory: False
