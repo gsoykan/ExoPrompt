@@ -82,7 +82,7 @@ Public GreenLight exports are available at https://data.4tu.nl/articles/_/130964
 
 ## Training & Evaluation Workflow
 
-### 1. Simulation Pretraining (Section 4.2)
+### 1. Simulation Pretraining (Section 3.2 + 3.1)
 Train ExoPrompt with 200k mixed synthetic samples:
 ```bash
 python src/train.py \
@@ -92,7 +92,7 @@ python src/train.py \
 ```
 Set `trainer.accelerator=gpu` (default) or override with `trainer=mps` / `trainer.cpu` depending on hardware. To sweep data scale (1k–7M samples) switch to the matching config under `.../pretraining/{1k,10k,...,7m}_pretraining_mixed.yaml`.
 
-### 2. Zero-Shot Evaluation on Ground Truth (Table 4)
+### 2. Zero-Shot Evaluation on Ground Truth (Table 3)
 Evaluate a pretrained checkpoint without fine-tuning:
 ```bash
 python src/eval.py \
@@ -102,7 +102,7 @@ python src/eval.py \
 ```
 Replace `exo_led` by `exo_hps` or `exo_mixed` for other lighting splits. To evaluate the vanilla baseline use `vanilla_led`, etc. The helper script `scripts/zero_shot_eval.sh` batches these runs—edit its `checkpoints_array` before execution.
 
-### 3. Fine-Tuning on Ground Truth (Section 4.3)
+### 3. Fine-Tuning on Ground Truth (Section 3.2)
 Start from a pretrained model and fine-tune on mixed LED+HPS data:
 ```bash
 python src/train.py \
@@ -117,7 +117,7 @@ python src/train.py \
 ```
 Use `data.experiment_config.type=hps_only` or `led_only` for cross-condition evaluations. The companion script `scripts/baseline_finetuning_server.sh` queues the LED↔HPS transfer experiments.
 
-### 4. Controlled cLeakage Generalization (Section 4.4)
+### 4. Controlled cLeakage Generalization (Section 3.3 + 3.4)
 Replicate the single-parameter shift experiment:
 ```bash
 python src/train.py \
@@ -131,13 +131,13 @@ All training runs emit Hydra logs under `logs/train/runs/<timestamp>/`, includin
 
 ## Mapping to Paper Results
 
-| Paper section / table | Config or script | Notes |
-| --- | --- | --- |
-| Sec. 4.2 Baseline conditioning comparison | `scripts/baseline_pretraining.sh` | Runs ExoLess, ExoConcat, ExoPrompt variants on synthetic data. |
-| Sec. 4.2 Data-scale study (Fig. 5) | `scripts/scaling_server.sh` | Sweeps pretraining subset sizes (1k–7M). |
-| Table 4 Zero-shot GT transfer | `scripts/zero_shot_eval.sh` | Requires editing checkpoint paths before execution. |
-| Sec. 4.3 Fine-tuning experiments | `scripts/scaling_finetuning_server.sh` | Automates mixed and cross-lighting fine-tuning. |
-| Sec. 4.4 cLeakage robustness | `scripts/generalization_sim_cleakage_gt_led_finetune_gt.sh` | Evaluates ExoPrompt vs vanilla under single-parameter shifts. |
+| Paper section / table                        | Config or script | Notes |
+|----------------------------------------------| --- | --- |
+| Sec. 3.2+3.1 Baseline conditioning comparison | `scripts/baseline_pretraining.sh` | Runs ExoLess, ExoConcat, ExoPrompt variants on synthetic data. |
+| Sec. 3.2 Data-scale study (Fig. 5)           | `scripts/scaling_server.sh` | Sweeps pretraining subset sizes (1k–7M). |
+| Table 3.1 Zero-shot GT transfer              | `scripts/zero_shot_eval.sh` | Requires editing checkpoint paths before execution. |
+| Sec. 3.2 Fine-tuning experiments             | `scripts/scaling_finetuning_server.sh` | Automates mixed and cross-lighting fine-tuning. |
+| Sec. 3.3+4 cLeakage robustness               | `scripts/generalization_sim_cleakage_gt_led_finetune_gt.sh` | Evaluates ExoPrompt vs vanilla under single-parameter shifts. |
 
 Check each script for environment-specific paths (`pretrained_ckpt`, scheduler directives) before running.
 
@@ -147,6 +147,7 @@ Check each script for environment-specific paths (`pretrained_ckpt`, scheduler d
 - Add `extras.print_config=true` to print the composed Hydra config for reproducibility.
 
 ## Citation
+- [ ] To be updated...
 ```bibtex
 @article{soykan2024exoprompt,
   title = {ExoPrompt: Transformer-Based Greenhouse Climate Forecasting with Structured Conditioning and Physics-Based Simulation},
@@ -159,5 +160,3 @@ Check each script for environment-specific paths (`pretrained_ckpt`, scheduler d
 
 ## Contact & License
 For questions or data access requests, contact Gurkan Soykan (gurkan.soykan@wur.nl).
-
-A formal open-source license is not yet attached; please coordinate with the authors before redistributing the code or datasets.
