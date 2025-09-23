@@ -1,0 +1,6 @@
+[submodule "iTransformer-official"]
+	path = iTransformer-official
+	url = https://github.com/thuml/iTransformer.git
+[submodule "TimeSeriesLibrary"]
+	path = TimeSeriesLibrary
+	url = https://github.com/gsoykan/Time-Series-Library.git
