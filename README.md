@@ -160,3 +160,4 @@ Check each script for environment-specific paths (`pretrained_ckpt`, scheduler d
 
 ## Contact & License
 For questions or data access requests, contact Gurkan Soykan (gurkan.soykan@wur.nl).
+A formal open-source license is not yet attached; please coordinate with the authors before redistributing the code or datasets. Data bundles and paper checkpoints will be released publicly soon; in the meantime, email to request access.
