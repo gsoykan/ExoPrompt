@@ -1,0 +1,136 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: exoprompt_greenlight_gt_timeseries
+  - override /model: greenlight_gt_timeseries_itransformer
+  - override /callbacks: wandb_watch_model_lite # wandb_watch_model, default
+  - override /trainer: mps # default
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: [ "without_exo_prompt", "finetuning", "greenlight_simulation", "timeseries", "dlinear" ]
+
+seed: 12345
+
+trainer:
+  min_epochs: 1
+  max_epochs: 50
+  gradient_clip_val: 0.5
+  log_every_n_steps: 50
+  accelerator: gpu
+  precision: 16-mixed
+
+model:
+  optimizer:
+    _target_: torch.optim.AdamW
+    _partial_: true
+    lr: 0.0001
+    weight_decay: 0.01
+  # update scheduler (make it same with the original repo)
+  scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    _partial_: true
+    mode: min
+    factor: 0.5
+    patience: 3
+  model_configs_dict:
+    model_name: "DLinear"  # Model name
+    moving_avg: 25  # Moving average window for trend-seasonal decomposition
+    task_name: "long_term_forecast"  # Task name
+    seq_len: 192  # Length of the input sequence
+    pred_len: 96  # Length of the prediction horizon
+    label_len: 48  # Label length (for decoder input)
+    e_layers: 4  # Number of encoder layers (unused by DLinear)
+    d_layers: 1  # Number of decoder layers (unused by DLinear)
+    factor: 3  # Attention factor (unused by DLinear)
+    embed: "timeF"  # Embedding type, could be time-based
+    freq: "t"  # Data frequency (e.g., hourly)
+    enc_in: 18  # Input dimension, depending on dataset
+    dec_in: 18 # 18 - depends on model.use_all_features_for_decoder
+    c_out: 3 # 18 - Output dimension depends on dec_in and hence model.use_all_features_for_decoder (can also be different)
+    d_model: 512  # Model dimension (unused by DLinear, kept for compatibility)
+    d_ff: 2048  # Dimension of feed-forward layers (unused by DLinear)
+    channel_independence: 1  # '0: channel dependence 1: channel independence for FreTS model'
+    dropout: 0 # Dropout rate (matched to Transformer)
+    use_norm: 1  # Whether to use normalization
+    top_k: 5  # Top-k value for selection (unused by DLinear)
+    num_kernels: 6  # Number of kernels for Inception (unused by DLinear)
+    # newly added
+    activation: gelu
+    n_heads: 8
+    expand: 2
+    d_conv: 4
+    inverse: false
+    # my params
+    use_all_features_for_decoder: true # depends on data.return_all_output_features
+    input_num_features: 18 # this is dependent on dataset
+    output_feature_idx: # null # can also be null
+      - 7
+      - 8
+      - 9
+    output_log_idx: # the order ["tAir", "vpAir", "co2Air"]
+      - 0
+      - 1
+      - 2
+    # exo_prompt_tuning configs (DLinear doesn't support ExoPrompt in current implementation)
+    enable_exo_prompt_tuning: false # false
+    prompt_tuning_type: two_layer_mlp # "two_layer_mlp - brute_concat"
+    num_virtual_tokens: 10
+    exo_prompt_dim: 254
+    exo_prompt_projector_hidden_size: 512  # Kept at 512 (matching previous experiments)
+  # compile model for faster training with pytorch 2.0
+  compile: false
+  loss_fn: "original_scale_mse"
+  # [TEMPLATE VALUES]
+  pretrained_ckpt: null
+
+
+data:
+  root_path: ${paths.data_dir}/from_david_by_gurkan/gt
+  train_subset_len: null
+  val_subset_len: null
+  test_subset_len: null
+  experiment_config:
+    # [TEMPLATE VALUES]
+    type: null # "hps_only" | "led_only" | "finetuning_mixed"
+  disable_exo_prompt: true
+  exo_params_len: 254
+  return_random_exo_params: false # true
+  size:
+    - 192
+    - 48
+    - 96
+  features: "M"
+  target: "OT"  # redundant in our context
+  scale: true
+  timeenc: 1
+  freq: "t"  # s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly
+  output_feature_idx:
+    - 7
+    - 8
+    - 9
+  use_greenlight_scaler: true
+  return_all_output_features: true # true
+  discarded_features:
+    - "sideLee"
+    - "sideWind"
+  batch_size: 256 # Needs to be divisible by the number of devices (e.g., if in a distributed setup)
+  num_workers: 10
+  pin_memory: False
+
+callbacks:
+  early_stopping:
+    monitor: "val/loss"
+    patience: 5
+    mode: "min"
+
+logger:
+  wandb:
+    tags: ${tags}
+    group: "greenlight-gt"
+  aim:
+    experiment: "greenlight-gt"

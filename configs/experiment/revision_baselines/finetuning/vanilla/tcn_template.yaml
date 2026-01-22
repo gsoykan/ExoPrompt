@@ -1,0 +1,119 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: exoprompt_greenlight_gt_timeseries
+  - override /model: greenlight_custom_baselines_timeseries
+  - override /callbacks: wandb_watch_model_lite # wandb_watch_model, default
+  - override /trainer: mps # default
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: [ "without_exo_prompt", "finetuning", "greenlight_simulation", "timeseries", "tcn" ]
+
+seed: 12345
+
+trainer:
+  min_epochs: 1
+  max_epochs: 50
+  gradient_clip_val: 0.5
+  log_every_n_steps: 50
+  accelerator: gpu
+  precision: 16-mixed
+
+model:
+  optimizer:
+    _target_: torch.optim.AdamW
+    _partial_: true
+    lr: 0.0001
+    weight_decay: 0.01
+  # update scheduler (make it same with the original repo)
+  scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    _partial_: true
+    mode: min
+    factor: 0.5
+    patience: 3
+  model_configs_dict:
+    model_name: "TCN"  # Model name
+    kernel_size: 3
+    use_weight_norm: true
+    embedding_type: token
+    seq_len: 192  # Length of the input sequence
+    pred_len: 96  # Length of the prediction horizon
+    label_len: 48
+    task_name: "long_term_forecast"
+    embed: "timeF"  # Embedding type, could be time-based
+    freq: "t"  # Data frequency (e.g., hourly)
+    output_feature_idx: # can also be null
+      - 0
+      - 1
+      - 2
+    output_log_idx: # if the above is null - then this should 7, 8, 9, the order ["tAir", "vpAir", "co2Air"]
+      - 0
+      - 1
+      - 2
+    enc_in: 18
+    dec_in: 3
+    d_model: 512  # Matched to Transformer capacity
+    e_layers: 6  # Increased for receptive field of 253 timesteps
+    dropout: 0  # Matched to Transformer dropout
+    enable_exo_prompt_tuning: False
+    prompt_tuning_type: "two_layer_mlp"
+    num_virtual_tokens: 10
+    exo_prompt_dim: 254
+    exo_prompt_projector_hidden_size: 512  # Kept at 512 (matching previous experiments)
+  # compile model for faster training with pytorch 2.0
+  compile: false
+  loss_fn: "original_scale_mse"
+  # [TEMPLATE VALUES]
+  pretrained_ckpt: null
+
+data:
+  root_path: ${paths.data_dir}/from_david_by_gurkan/gt
+  train_subset_len: null
+  val_subset_len: null
+  test_subset_len: null
+  experiment_config:
+    # [TEMPLATE VALUES]
+    type: null # "hps_only" | "led_only" | "finetuning_mixed"
+  disable_exo_prompt: true
+  exo_params_len: 254
+  return_random_exo_params: false # true
+  size:
+    - 192
+    - 48
+    - 96
+  features: "M"
+  target: "OT"  # redundant in our context
+  scale: true
+  timeenc: 1
+  freq: "t"  # s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly
+  output_feature_idx:
+    - 7
+    - 8
+    - 9
+  use_greenlight_scaler: true
+  return_all_output_features: true # true
+  discarded_features:
+    - "sideLee"
+    - "sideWind"
+  batch_size: 256 # Needs to be divisible by the number of devices (e.g., if in a distributed setup)
+  num_workers: 10
+  pin_memory: False
+
+callbacks:
+  early_stopping:
+    monitor: "val/loss"
+    patience: 5
+    mode: "min"
+
+logger:
+  wandb:
+    tags: ${tags}
+    group: "greenlight-gt"
+  aim:
+    experiment: "greenlight-gt"

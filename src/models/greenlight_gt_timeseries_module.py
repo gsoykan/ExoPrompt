@@ -102,6 +102,10 @@ class GreenlightGTTimeSeriesLitModule(LightningModule):
                     from TimeSeriesLibrary.models.TimeXer import Model as TimeXerModel
 
                     self.net = TimeXerModel(model_configs)
+                case "DLinear":
+                    from TimeSeriesLibrary.models.DLinear import Model as DLinearModel
+
+                    self.net = DLinearModel(model_configs)
                 case _:
                     raise ValueError(f"unknown model type: {model_configs.model_name}")
         else:
