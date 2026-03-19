@@ -1,11 +1,8 @@
 # ExoPrompt: Transformer-Based Greenhouse Climate Forecasting with Structured Conditioning and Physics-Based Simulation
 
-> Official implementation of the ExoPrompt framework for the paper "ExoPrompt: Transformer-Based Greenhouse Climate Forecasting with Structured Conditioning and Physics-Based Simulation".
+> Official implementation of the ExoPrompt framework for the paper ["ExoPrompt: Transformer-based greenhouse climate forecasting with structured conditioning and physics-based simulation"](https://doi.org/10.1016/j.compag.2026.111673) published in *Computers and Electronics in Agriculture*.
 
 ExoPrompt fuses structured exogenous prompts with physics-based simulations to deliver digital-twin ready greenhouse climate forecasts that stay robust under changing environmental and operational conditions.
-
-## Paper Reference
-- Soykan, Gurkan; Babur, Onder; Liu, Qingzhi; Tekinerdogan, Bedir (2024). *ExoPrompt: Transformer-Based Greenhouse Climate Forecasting with Structured Conditioning and Physics-Based Simulation*. Computers and Electronics in Agriculture (submitted). The repository mirrors the experiments described in the manuscript.
 
 ## Key Capabilities
 - **Exogenous soft prompts** encode 254 structural, environmental, and crop parameters as learnable context, allowing a single transformer backbone to adapt across greenhouse layouts.
@@ -16,7 +13,7 @@ ExoPrompt fuses structured exogenous prompts with physics-based simulations to d
 ## Repository Layout
 - `src/` – Lightning modules, data interfaces, ExoPrompt embeddings, and custom losses.
 - `configs/` – Hydra configuration tree (data, model, trainer, experiments, paths) mirroring the paper's study design.
-- `data/` – expected location of GreenLight simulation and ground-truth CSV/JSON bundles (`from_david_by_gurkan/...`).
+- `data/` – expected location of GreenLight simulation and ground-truth CSV/JSON bundles (`exoprompt-dataset/...`).
 - `scripts/` – shell helpers that batch pretraining, scaling, zero-shot, and controlled `cLeakage` runs.
 - `TimeSeriesLibrary/` – local fork providing baseline time-series architectures.
 - `iTransformer-official/` – submodule with the official iTransformer implementation.
@@ -54,11 +51,11 @@ The experiments assume access to the GreenLight simulator datasets described in 
 - **Ground-truth measurements**: tomato greenhouse trial (Bleiswijk, 2009–2010) under LED and HPS lighting. Files are segmented into `gt/led` and `gt/hps`.
 - **Controlled cLeakage study**: synthetic runs with a single exogenous `cLeakage` parameter varied, plus the corresponding ground-truth subsets.
 
-Place the data under `data/from_david_by_gurkan/` with the following structure (matching Appendix B of the manuscript):
+Place the data under `data/exoprompt-dataset/` with the following structure (matching Appendix B of the manuscript):
 
 ```
 data/
-  from_david_by_gurkan/
+  exoprompt-dataset/
     new_world_sim/
       referenceSetting/
       heatAdjustment/
@@ -125,7 +122,7 @@ python src/train.py \
   model.pretrained_ckpt=/path/to/pretrained.ckpt \
   data.experiment_config.fine_tune_ratio=0.25
 ```
-Switch to `.../vanilla.yaml` to compare against the ExoLess baseline. The dataset root defaults to `data/from_david_by_gurkan/c_leakage_gt_led_conditions_csv`.
+Switch to `.../vanilla.yaml` to compare against the ExoLess baseline. The dataset root defaults to `data/exoprompt-dataset/c_leakage_gt_led_conditions_csv`.
 
 All training runs emit Hydra logs under `logs/train/runs/<timestamp>/`, including the composed configuration (`.yaml`), checkpoints, and Lightning metrics. Target metrics match the paper (RMSE, RRMSE, ME for `tAir`, `vpAir`, `co2Air`).
 
@@ -147,17 +144,22 @@ Check each script for environment-specific paths (`pretrained_ckpt`, scheduler d
 - Add `extras.print_config=true` to print the composed Hydra config for reproducibility.
 
 ## Citation
-- [ ] To be updated...
 ```bibtex
-@article{soykan2024exoprompt,
-  title = {ExoPrompt: Transformer-Based Greenhouse Climate Forecasting with Structured Conditioning and Physics-Based Simulation},
-  author = {Soykan, Gurkan and Babur, Onder and Liu, Qingzhi and Tekinerdogan, Bedir},
+@article{SOYKAN2026111673,
+  title = {ExoPrompt: Transformer-based greenhouse climate forecasting with structured conditioning and physics-based simulation},
   journal = {Computers and Electronics in Agriculture},
-  year = {2024},
-  note = {Preprint}
+  volume = {246},
+  pages = {111673},
+  year = {2026},
+  issn = {0168-1699},
+  doi = {https://doi.org/10.1016/j.compag.2026.111673},
+  url = {https://www.sciencedirect.com/science/article/pii/S0168169926002681},
+  author = {Gürkan Soykan and Önder Babur and Qingzhi Liu and Bedir Tekinerdogan},
+  keywords = {Microclimate, Greenhouse, Simulation, Forecasting, Transformers, Conditioning, Digital twins}
 }
 ```
 
 ## Contact & License
-For questions or data access requests, contact Gurkan Soykan (gurkan.soykan@wur.nl).
-A formal open-source license is not yet attached; please coordinate with the authors before redistributing the code or datasets. Data bundles and paper checkpoints will be released publicly soon; in the meantime, email to request access.
+For questions or data access requests, contact Gürkan Soykan (gurkan.soykan@wur.nl).
+
+The code in this repository is released under the [MIT License](LICENSE). The accompanying article is open access under the [Creative Commons CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/) - you are free to use, share, and adapt with proper citation.
