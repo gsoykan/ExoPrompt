@@ -75,7 +75,7 @@ data/
       gt/
 ```
 
-Public GreenLight exports are available at https://data.4tu.nl/articles/_/13096403; regenerated runs used in the paper follow the same format. Adjust `data.root_path` overrides if your layout differs.
+The data and model checkpoints used in the paper are publicly available at https://doi.org/10.4121/73060077-ec7c-4ad5-ab03-339a3430b6b5. Public GreenLight exports are also available at https://data.4tu.nl/articles/_/13096403. Adjust `data.root_path` overrides if your layout differs.
 
 ## Training & Evaluation Workflow
 
