@@ -1,3 +1,7 @@
+> 📩 **Open to collaborations.** Working on greenhouse digital twins, or have a real greenhouse where ExoPrompt could be applied? Get in touch at [gurkan.soykan@wur.nl](mailto:gurkan.soykan@wur.nl) · [project page](https://research.wur.nl/en/projects/adaptive-digital-twins-for-precision-agriculture/) · [WUR Digital Twin Lab](https://wurdt.github.io/).
+
+---
+
 # ExoPrompt: Transformer-Based Greenhouse Climate Forecasting with Structured Conditioning and Physics-Based Simulation
 
 > Official implementation of the ExoPrompt framework for the paper ["ExoPrompt: Transformer-based greenhouse climate forecasting with structured conditioning and physics-based simulation"](https://doi.org/10.1016/j.compag.2026.111673) published in *Computers and Electronics in Agriculture*.
@@ -142,6 +146,16 @@ Check each script for environment-specific paths (`pretrained_ckpt`, scheduler d
 - Default loggers: CSV and TensorBoard; enable Weights & Biases via `logger=wandb logger.wandb.project=exoprompt`.
 - Lightning checkpoints capture the best validation loss; metrics of interest (`val/rrmse_tAir`, `test/me_co2Air`, etc.) are available via `trainer.callback_metrics`.
 - Add `extras.print_config=true` to print the composed Hydra config for reproducibility.
+
+## Get Involved
+
+This work is part of a broader PhD on adaptive digital twins for greenhouses ([project page](https://research.wur.nl/en/projects/adaptive-digital-twins-for-precision-agriculture/)), carried out at the [WUR Digital Twin Lab](https://wurdt.github.io/). If you are working in this space, we would be glad to hear from you. Some directions we would love to explore:
+
+- **Greenhouse access**: applying ExoPrompt or the broader digital-twin framework to a real greenhouse, in research or industry settings.
+- **Methodology extensions**: new exogenous factors, crops, sites, or conditioning mechanisms.
+- **Integration and benchmarking**: embedding ExoPrompt into existing digital-twin systems, comparative studies, or replication.
+
+Get in touch: [gurkan.soykan@wur.nl](mailto:gurkan.soykan@wur.nl)
 
 ## Citation
 ```bibtex
