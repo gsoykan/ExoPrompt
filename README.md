@@ -8,6 +8,10 @@
 
 ExoPrompt fuses structured exogenous prompts with physics-based simulations to deliver digital-twin ready greenhouse climate forecasts that stay robust under changing environmental and operational conditions.
 
+> 🚀 **Try it now** — [**Live demo on Hugging Face Spaces**](https://huggingface.co/spaces/gsoykan/exoprompt-inference) · 🤗 [**Paper checkpoints**](https://huggingface.co/gsoykan/exoprompt-checkpoints) · 🛠️ [**Demo source**](https://github.com/gsoykan/exoprompt-inference)
+>
+> Interactive Streamlit app for the six paper checkpoints (HPS · LED · Mixed × Vanilla · ExoPrompt), with bundled sample greenhouse trajectories so the demo works on first visit with zero setup.
+
 ## Key Capabilities
 - **Exogenous soft prompts** encode 254 structural, environmental, and crop parameters as learnable context, allowing a single transformer backbone to adapt across greenhouse layouts.
 - **Simulation-informed pretraining** on nine GreenLight scenarios (15 locations, dual lighting setups) yields up to 53.22% relative-humidity RRMSE reduction versus non-pretrained baselines and an 84.25% improvement over simulator-only predictions.
@@ -79,7 +83,7 @@ data/
       gt/
 ```
 
-The data and model checkpoints used in the paper are publicly available at https://doi.org/10.4121/73060077-ec7c-4ad5-ab03-339a3430b6b5. Public GreenLight exports are also available at https://data.4tu.nl/articles/_/13096403. Adjust `data.root_path` overrides if your layout differs.
+The full data + model checkpoint archive used in the paper is on 4TU.ResearchData at https://doi.org/10.4121/73060077-ec7c-4ad5-ab03-339a3430b6b5 (canonical academic mirror, all training artifacts). A streamlined subset — the 200k-sample HPS / LED / Mixed pretraining runs for both Vanilla and ExoPrompt variants — is also published on the [Hugging Face Hub](https://huggingface.co/gsoykan/exoprompt-checkpoints) for direct programmatic access (`huggingface_hub.hf_hub_download(...)`). Public GreenLight exports are at https://data.4tu.nl/articles/_/13096403. Adjust `data.root_path` overrides if your layout differs.
 
 ## Training & Evaluation Workflow
 
